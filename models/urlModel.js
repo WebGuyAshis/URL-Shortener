@@ -8,12 +8,10 @@ const urlSchema = new mongoose.Schema({
    },
    shortUrl:{
     type:String,
-    required:true,
    },
-   shortId:{
-    type:String,
-    required:true,
-   }
+//    shortId:{
+//     type:String,
+//    }
 },{
     timestamps:true
 });
