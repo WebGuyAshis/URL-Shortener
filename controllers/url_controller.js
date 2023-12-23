@@ -4,7 +4,7 @@ export const urlShortener = async (req, res) => {
 
     // Checking request authorization
     if(!req.isAuthenticated()){
-    return res.status(401).json({success: "False", message: "Not Authorized!" });
+    return res.status(401).json({success: false, message: "Not Authorized!" });
     }
 
     try {
@@ -12,6 +12,10 @@ export const urlShortener = async (req, res) => {
 
         const activeUrl = req.get("host");
 
+        const existingUrl = await URL.findOne({orgUrl: url})
+        if(existingUrl){
+            return res.status(409).json({success:false, message: "Shorten Url Alreadey Exists!", "Shorten Url": existingUrl.shortUrl})
+        }
         // Creating URL In DB
         const newUrl = await URL.create({
             orgUrl: url
@@ -37,7 +41,7 @@ export const urlShortener = async (req, res) => {
 
         return res.status(200).json({ "Orginal URL:": newUrl.orgUrl, "Shorten Url:": newUrl.shortUrl });
     } catch (error) {
-        return res.status(400).json({ error: "Error Creating Shorten Url" });
+        return res.status(400).json({success:false, error: "Error Creating Shorten Url" });
     }
 };
 
@@ -53,6 +57,6 @@ export const redirectFunc = async (req, res) => {
             return res.redirect(url.orgUrl);
         }
     } catch (error) {
-        return res.status(404).json({ error: "Link Expired or Invalid!" });
+        return res.status(404).json({success:false, error: "Link Expired or Invalid!" });
     }
 };

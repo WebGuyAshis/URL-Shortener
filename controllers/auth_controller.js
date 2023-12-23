@@ -11,7 +11,7 @@ export const register = async (req, res) => {
     // If User ALready exists
     if (existingUser) {
       return res.status(409).json({
-        success:"False",
+        success:false,
         error: "User already exists!",
       });
     }
@@ -20,7 +20,7 @@ export const register = async (req, res) => {
     const registerUser = await User.create(req.body);
     return res
       .status(201)
-      .json({ success: "True", message: "Registration Successfull!" });
+      .json({ success: true, message: "Registration Successfull!" });
   } catch (error) {
     // Error Handling
     return res.status(500).json({
@@ -38,11 +38,11 @@ export const loginMiddleware = (req, res, next) => {
       if (err) {
         return res
           .status(500)
-          .json({ success: "False", error: "Error Signing In!" });
+          .json({ success: false, error: "Error Signing In!" });
       }
       if (!user) {
         return res.status(401).json({
-          success: "False",
+          success: false,
           error: "User Not Found!",
         });
       }
@@ -50,14 +50,14 @@ export const loginMiddleware = (req, res, next) => {
       req.logIn(user, (err) => {
         if (err) {
           return res.status(500).json({
-            success: "False",
+            success: false,
             error: "Error Logging in User!",
           });
         }
         // Successful authentication
         return res
           .status(200)
-          .json({ success: "True", message: "Login Successfull!" });
+          .json({ success: true, message: "Login Successfull!" });
       });
     }
   )(req, res, next);
@@ -69,12 +69,12 @@ export const logoutUser = (req, res) => {
       return res
         .status(500)
         .json({
-          success: "False",
+          success: false,
           error: "Error Logging Out! Please try again!",
         });
     }
     return res
       .status(201)
-      .json({ success: "True", message: "Logout Successfull!" });
+      .json({ success: true, message: "Logout Successfull!" });
   });
 };
