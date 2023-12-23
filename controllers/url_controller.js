@@ -8,8 +8,12 @@ export const urlShortener = async (req, res) => {
     }
 
     try {
-        const { url } = req.body;
+        let { url } = req.body;
         const activeUrl = req.get("host");
+
+        if(!url.startsWith('https://')){
+            url = 'https://' + url;
+        }
 
         const existingUrl = await URL.findOne({orgUrl: url})
         if(existingUrl){
@@ -40,6 +44,7 @@ export const urlShortener = async (req, res) => {
 
         return res.status(200).json({ "Orginal URL:": newUrl.orgUrl, "Shorten Url:": newUrl.shortUrl });
     } catch (error) {
+        console.log("Error!", error);
         return res.status(400).json({success:false, error: "Error Creating Shorten Url" });
     }
 };
