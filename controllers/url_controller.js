@@ -9,7 +9,6 @@ export const urlShortener = async (req, res) => {
 
     try {
         const { url } = req.body;
-
         const activeUrl = req.get("host");
 
         const existingUrl = await URL.findOne({orgUrl: url})
